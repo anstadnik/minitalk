@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/19 14:49:33 by astadnik         ###   ########.fr       */
+/*   Updated: 2018/05/19 16:44:47 by astadnik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	send_char(int pid, char chr)
 			return (1);
 		if (DEBUG)
 			ft_printf("%d", !!(chr & 1 << i));
+		usleep(10);
 	}
 	if (DEBUG)
 		ft_printf("\n");
