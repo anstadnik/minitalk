@@ -1,4 +1,4 @@
-.PHONY: clean fclean re
+.PHONY: clean fclean re r
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -Wconversion#remove last one
 ODIR = objs/
@@ -24,6 +24,9 @@ $(LIB):
 $(addprefix $(ODIR), %.o): $(addprefix $(SDIR), %.c)
 	@printf "."
 	@$(CC) $(CFLAGS) -I$(IDIR) -c -o $@ $<
+
+r: $(NAME)
+	./$(NAME) 123 potato
 
 clean: clean_objs
 	@$(MAKE) -C $(LDIR) clean
