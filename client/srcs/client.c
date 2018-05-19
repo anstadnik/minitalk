@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/19 19:47:20 by astadnik         ###   ########.fr       */
+/*   Updated: 2018/05/19 21:29:03 by astadnik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int		send(int pid, void *data, size_t size)
 	char	*ptr;
 
 	ptr = (char *)data;
-	pid = 0;
 	while (size--)
 	{
 		if (kill(pid, *ptr & 1 << size % 8 ? SIGUSR2 : SIGUSR1))
@@ -70,8 +69,14 @@ int		send_string(int pid, char *str)
 			break;
 	}
 	g_bit = -1;
-	while (g_bit == -1)
-		pause();
+	while (42)
+	{
+		usleep(20);
+		if (g_bit == -1)
+			kill(pid, SIGUSR1);
+		else
+			break ;
+	}
 	return (g_bit ? 0 : -1);
 }
 
