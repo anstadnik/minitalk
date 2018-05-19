@@ -1,26 +1,23 @@
-.PHONY: clean fclean re
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -Wconversion#remove last one
-ODIR = objs/
-SDIR = srcs/
-IDIR = includes/
-NAME = client
-FILES =
-OBJS = $(FILES:.c=.o)
+.PHONY: clean fclean re client server
 
-all: $(addprefix $(ODIR), $(OBJS))#add message
-	@$(CC) $(CFLAGS) -I$(IDIR) -c -o $@ $<#Change it
+TARGETS = client server
 
-$(addprefix $(ODIR), %.o): $(addprefix $(SDIR), %.c)
-	@printf "."
-	@$(CC) $(CFLAGS) -I$(IDIR) -c -o $@ $<
+all: $(TARGETS)
+
+$(TARGETS):
+	@echo "\x1b[36m\nCompiling $@\x1b[0m"
+	@$(MAKE) -C $@
 
 clean:
-	@echo "\x1b[31mRemoving the object files of $(NAME)\x1b[0m"
-	@rm -f $(addprefix $(ODIR), $(OBJS))
+	@for dir in $(TARGETS); do \
+		$(MAKE) -C $$dir clean; \
+	done
 
-fclean: clean
+fclean:
+	@for dir in $(TARGETS); do \
+		$(MAKE) -C $$dir clean; \
+	done
 
-re:
+re: 
 	@$(MAKE) fclean
-	@$(MAKE)
+	@$(MAKE) 
