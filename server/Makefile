@@ -7,7 +7,7 @@ IDIR = includes/
 LDIR = ../libft/
 NAME = server
 LIB = $(LDIR)libft.a
-FILES = server.c
+FILES = server.c lstfuncs.c
 OBJS = $(FILES:.c=.o)
 
 all: $(NAME)
