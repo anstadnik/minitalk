@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:20 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/19 14:44:25 by astadnik         ###   ########.fr       */
+/*   Updated: 2018/05/19 19:23:43 by astadnik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,6 @@
 # include "../../libft/includes/libft.h"
 # include "limits.h"
 # include <signal.h>
+typedef unsigned int uint;
 
 #endif

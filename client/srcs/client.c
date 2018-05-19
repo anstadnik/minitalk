@@ -6,48 +6,88 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/19 17:09:12 by astadnik         ###   ########.fr       */
+/*   Updated: 2018/05/19 19:47:20 by astadnik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-int	send_char(int pid, char chr)
-{
-	char	i;
+char	g_bit;
 
-	i = 8;
-	while (i--)
+void	handler(int sig)
+{
+	if (sig == 31)
+		g_bit = 1;
+	else if (sig == 30)
+		g_bit = 0;
+	else
+		g_bit = -1;
+}
+
+int		send(int pid, void *data, size_t size)
+{
+	char	*ptr;
+
+	ptr = (char *)data;
+	pid = 0;
+	while (size--)
 	{
-		if (kill(pid, chr & 1 << i ? SIGUSR2 : SIGUSR1))
+		if (kill(pid, *ptr & 1 << size % 8 ? SIGUSR2 : SIGUSR1))
 			return (1);
 		if (DEBUG)
-			ft_printf("%d", !!(chr & 1 << i));
-		usleep(10);
+			ft_printf("%d", !!(*ptr & 1 << size % 8));
+		if (!(size % 8))
+			ptr++;
+		usleep(20);
 	}
 	if (DEBUG)
 		ft_printf("\n");
 	return (0);
 }
 
-int	send_string(int pid, char *str)
+uint	get_hash(char *str)
 {
-	while (42)
-	{
-		if (send_char(pid, *str))
-			return (1);
-		if (!*str++)
-			return (0);
-	}
+	uint	rez;
+
+	rez = 0;
+	while (*str)
+		rez += (uint)*str++;
+	return (rez);
 }
 
-int	main(int ac, char **av)
+int		send_string(int pid, char *str)
+{
+	uint	hash;
+
+	hash = get_hash(str);
+	if (send(pid, &hash, sizeof(int) * 8))
+		return (1);
+	while (42)
+	{
+		if (send(pid, str, sizeof(char) * 8))
+			return (1);
+		if (!*str++)
+			break;
+	}
+	g_bit = -1;
+	while (g_bit == -1)
+		pause();
+	return (g_bit ? 0 : -1);
+}
+
+int		main(int ac, char **av)
 {
 	int	pid;
+	int	ret;
 
 	if (ac != 3 || ft_isinteger(av[1]))
 		return (1);
+	if (DEBUG)
+		ft_printf("%d\n", getpid());
+	signal(SIGUSR1, handler);
+	signal(SIGUSR2, handler);
 	pid = ft_atoi(av[1]);
-	return (send_string(pid, av[2]));
-	//return (ac != 3 || ft_isinteger(av[1]) ? 1 : send_string(ft_atoi(av[1])), av[2]);
+	while ((ret = send_string(pid, av[2])) == -1)
+		;
+	return (ret);
 }
