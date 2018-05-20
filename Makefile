@@ -15,7 +15,7 @@ clean:
 
 fclean:
 	@for dir in $(TARGETS); do \
-		$(MAKE) -C $$dir clean; \
+		$(MAKE) -C $$dir fclean; \
 	done
 
 re: 

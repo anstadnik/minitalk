@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/20 16:15:30 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 16:42:54 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		send_letter(int pid, char c)
 			return (1);
 		if (DEBUG)
 			ft_printf("%d", !!(c & 1 << i));
-		usleep(20);
+		usleep(50);
 	}
 	if (DEBUG)
 		ft_printf("\n");
@@ -55,7 +55,7 @@ int		send_hash(int pid, char *str)
 			return (1);
 		if (DEBUG)
 			ft_printf("%d", !!(hash & 1 << i));
-		usleep(20);
+		usleep(50);
 	}
 	if (DEBUG)
 		ft_printf("\n");
@@ -79,7 +79,7 @@ int		send_string(int pid, char *str)
 	c = 0;
 	while (c++ < 50)
 	{
-		usleep(1000);
+		usleep(100);
 		if (g_bit == -1)
 			kill(pid, SIGUSR1);
 		else
