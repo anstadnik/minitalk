@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/20 15:30:29 by astadnik         ###   ########.fr       */
+/*   Updated: 2018/05/20 16:15:30 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ char	g_bit;
 
 void	handler(int sig)
 {
-	if (sig == 31)
+	if (sig == SIGUSR2)
 		g_bit = 1;
-	else if (sig == 30)
+	else if (sig == SIGUSR1)
 		g_bit = 0;
-	else
-		g_bit = -1;
 }
 
 int		send_letter(int pid, char c)
@@ -68,6 +66,7 @@ int		send_string(int pid, char *str)
 {
 	int	c;
 
+	g_bit = -1;
 	if (send_hash(pid, str))
 		return (1);
 	while (42)
@@ -77,11 +76,10 @@ int		send_string(int pid, char *str)
 		if (!*str++)
 			break ;
 	}
-	g_bit = -1;
 	c = 0;
 	while (c++ < 50)
 	{
-		usleep(20);
+		usleep(1000);
 		if (g_bit == -1)
 			kill(pid, SIGUSR1);
 		else
@@ -107,6 +105,7 @@ int		main(int ac, char **av)
 	pid = ft_atoi(av[1]);
 	while ((ret = send_string(pid, av[2])) == -1)
 		;
-	if (
+	if (ret == 0 && !ft_strcmp(av[2], "ping"))
+		ft_printf("{green}pong\n{eoc}");
 	return (ret);
 }
