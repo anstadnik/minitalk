@@ -6,7 +6,7 @@
 /*   By: bcherkas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 19:38:33 by bcherkas          #+#    #+#             */
-/*   Updated: 2018/05/20 13:22:57 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 15:25:17 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,9 @@ void	lstfree(t_data *lst, t_data **main)
 	}
 	head = *main;
 	while (head && head->next != lst)
-	{
-		head->next = lst->next;
-		free(lst);
 		head = head->next;
-	}
+	head->next = lst->next;
+	free(lst);
 }
 
 void	print_string(t_data *start)
@@ -52,7 +50,7 @@ void	print_string(t_data *start)
 		free(tmp);
 		i++;
 	}
-	check_hash(str, start);
+	check_hash(str, start, len);
 }
 
 int		bit_shift(t_data *lst, int sig)
@@ -78,7 +76,6 @@ void	usr_handler(int sig, siginfo_t *sig_info, void *p)
 	start = find_in_lst(&lst, (size_t)sig_info->si_pid);
 	if (--start->counter >= 0)
 	{
-		ft_printf("%d", sig == SIGUSR2 ? 1 : 0);
 		if (sig == SIGUSR2)
 			start->hash |= 1 << (start->counter);
 		return ;
