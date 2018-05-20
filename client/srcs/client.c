@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/19 21:29:03 by astadnik         ###   ########.fr       */
+/*   Updated: 2018/05/20 13:38:42 by astadnik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,17 @@ void	handler(int sig)
 		g_bit = -1;
 }
 
-int		send(int pid, void *data, size_t size)
+int		send_letter(int pid, char c)
 {
-	char	*ptr;
+	char	i;
 
-	ptr = (char *)data;
-	while (size--)
+	i = 8;
+	while (i--)
 	{
-		if (kill(pid, *ptr & 1 << size % 8 ? SIGUSR2 : SIGUSR1))
+		if (kill(pid, c & 1 << i ? SIGUSR2 : SIGUSR1))
 			return (1);
 		if (DEBUG)
-			ft_printf("%d", !!(*ptr & 1 << size % 8));
-		if (!(size % 8))
-			ptr++;
+			ft_printf("%d", !!(c & 1 << i));
 		usleep(20);
 	}
 	if (DEBUG)
@@ -44,32 +42,45 @@ int		send(int pid, void *data, size_t size)
 	return (0);
 }
 
-uint	get_hash(char *str)
+int	send_hash(int pid, char *str)
 {
-	uint	rez;
+	uint	hash;
+	char	i;
 
-	rez = 0;
+	hash = 0;
 	while (*str)
-		rez += (uint)*str++;
-	return (rez);
+		hash += (uint)*str++;
+	i = 32;
+	while (i--)
+	{
+		if (kill(pid, hash & 1 << i ? SIGUSR2 : SIGUSR1))
+			return (1);
+		if (DEBUG)
+			ft_printf("%d", !!(hash & 1 << i));
+		usleep(20);
+	}
+	if (DEBUG)
+		ft_printf("\n");
+	return (0);
+
 }
 
 int		send_string(int pid, char *str)
 {
-	uint	hash;
+	int	c;
 
-	hash = get_hash(str);
-	if (send(pid, &hash, sizeof(int) * 8))
+	if (send_hash(pid, str))
 		return (1);
 	while (42)
 	{
-		if (send(pid, str, sizeof(char) * 8))
+		if (send_letter(pid, *str))
 			return (1);
 		if (!*str++)
 			break;
 	}
 	g_bit = -1;
-	while (42)
+	c = 0;
+	while (c++ < 20)
 	{
 		usleep(20);
 		if (g_bit == -1)
@@ -77,6 +88,8 @@ int		send_string(int pid, char *str)
 		else
 			break ;
 	}
+	if (c == 20)
+		return (1);
 	return (g_bit ? 0 : -1);
 }
 
