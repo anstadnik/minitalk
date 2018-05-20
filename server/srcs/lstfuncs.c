@@ -6,13 +6,13 @@
 /*   By: bcherkas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:44:35 by bcherkas          #+#    #+#             */
-/*   Updated: 2018/05/19 19:38:25 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 11:57:37 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-size_t	ft_lstlen(t_list *lst)
+size_t	ft_lstlen(t_data *lst)
 {
 	size_t	i;
 
@@ -25,22 +25,24 @@ size_t	ft_lstlen(t_list *lst)
 	return (i);
 }
 
-t_list	*pid_lstnew(size_t pid)
+t_data	*pid_lstnew(size_t pid)
 {
-	t_list	*lst;
+	t_data	*lst;
 
-	lst = (t_list *)malloc(sizeof(t_list));
+	lst = (t_data *)malloc(sizeof(t_data));
 	lst->content_size = pid;
 	lst->content = NULL;
 	lst->next = NULL;
+	lst->hash = 0;
+	lst->counter = 32;
 	return (lst);
 }
 
-t_list	*new_son_lst(void)
+t_data	*new_son_lst(void)
 {
-	t_list	*lst;
+	t_data	*lst;
 
-	lst = (t_list *)malloc(sizeof(t_list));
+	lst = (t_data *)malloc(sizeof(t_data));
 	lst->next = NULL;
 	lst->content = (char *)malloc(sizeof(char));
 	*((char *)(lst->content)) = 0;
@@ -48,16 +50,16 @@ t_list	*new_son_lst(void)
 	return (lst);
 }
 
-t_list	*find_last_elem(t_list *daddy)
+t_data	*find_last_elem(t_data *daddy)
 {
-	t_list	*lst;
+	t_data	*lst;
 
 	if (daddy->content == NULL)
 	{
 		daddy->content = new_son_lst();
 		return (daddy->content);
 	}
-	lst = (t_list *)daddy->content;
+	lst = (t_data *)daddy->content;
 	while (lst->next && lst->content_size == 0)
 		lst = lst->next;
 	if (lst->content_size == 0)
@@ -68,9 +70,9 @@ t_list	*find_last_elem(t_list *daddy)
 	return (lst);
 }
 
-t_list	*find_in_lst(t_list **lst, size_t pid)
+t_data	*find_in_lst(t_data **lst, ssize_t pid)
 {
-	t_list	*head;
+	t_data	*head;
 
 	if (*lst == NULL)
 	{

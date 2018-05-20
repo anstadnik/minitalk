@@ -6,15 +6,15 @@
 /*   By: bcherkas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 19:38:33 by bcherkas          #+#    #+#             */
-/*   Updated: 2018/05/19 20:00:44 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 13:22:57 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
-void	lstfree(t_list *lst, t_list **main)
+void	lstfree(t_data *lst, t_data **main)
 {
-	t_list	*head;
+	t_data	*head;
 
 	if (lst == *main)
 	{
@@ -31,15 +31,15 @@ void	lstfree(t_list *lst, t_list **main)
 	}
 }
 
-void	print_string(t_list *start)
+void	print_string(t_data *start)
 {
 	size_t	i;
 	size_t	len;
-	t_list	*lst;
+	t_data	*lst;
 	char	*str;
-	t_list	*tmp;
+	t_data	*tmp;
 
-	lst = (t_list *)start->content;
+	lst = (t_data *)start->content;
 	len = ft_lstlen(lst);
 	str = ft_memalloc(len);
 	i = 0;
@@ -52,11 +52,10 @@ void	print_string(t_list *start)
 		free(tmp);
 		i++;
 	}
-	ft_printf("%s\n", str);
-	ft_strdel(&str);
+	check_hash(str, start);
 }
 
-int		bit_shift(t_list *lst, int sig)
+int		bit_shift(t_data *lst, int sig)
 {
 	lst->content_size--;
 	if (sig == SIGUSR2)
@@ -68,13 +67,22 @@ int		bit_shift(t_list *lst, int sig)
 
 void	usr_handler(int sig, siginfo_t *sig_info, void *p)
 {
-	static t_list	*lst;
-	t_list			*head;
-	t_list			*start;
+	static t_data	*lst;
+	t_data			*head;
+	t_data			*start;
 
 	if (p)
 		;
+	if ((size_t)sig_info->si_pid == 0)
+		return ;
 	start = find_in_lst(&lst, (size_t)sig_info->si_pid);
+	if (--start->counter >= 0)
+	{
+		ft_printf("%d", sig == SIGUSR2 ? 1 : 0);
+		if (sig == SIGUSR2)
+			start->hash |= 1 << (start->counter);
+		return ;
+	}
 	head = find_last_elem(start);
 	if (bit_shift(head, sig))
 	{
@@ -86,11 +94,7 @@ void	usr_handler(int sig, siginfo_t *sig_info, void *p)
 int		main(void)
 {
 	t_sigaction	sig_act;
-	int			i;
-	char		c;
 
-	i = 8;
-	c = 0;
 	ft_printf("%d\n", getpid());
 	sig_act.sa_flags = SA_SIGINFO;
 	sig_act.sa_sigaction = usr_handler;
