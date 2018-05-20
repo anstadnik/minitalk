@@ -6,7 +6,7 @@
 /*   By: bcherkas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:35:04 by bcherkas          #+#    #+#             */
-/*   Updated: 2018/05/19 19:58:34 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 12:13:52 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,22 @@
 # include "signal.h"
 # include <unistd.h>
 
+# define HASH_MAX_BYTES 32
+
 typedef struct sigaction	t_sigaction;
 
-typedef struct				s_info
+typedef struct 				s_data
 {
+	void					*content;
+	ssize_t					content_size;
 	int						counter;
-	unsigned				hash;
-}							t_info;
+	unsigned int			hash;
+	struct s_data			*next;
+}							t_data;
 
-t_list						*find_in_lst(t_list **lst, size_t pid);
-t_list						*find_last_elem(t_list *daddy);
-size_t						ft_lstlen(t_list *lst);
+unsigned					check_hash(char *str, t_data *lst);
+t_data						*find_in_lst(t_data **lst, ssize_t pid);
+t_data						*find_last_elem(t_data *daddy);
+size_t						ft_lstlen(t_data *lst);
 
 #endif
