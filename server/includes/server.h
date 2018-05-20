@@ -6,7 +6,7 @@
 /*   By: bcherkas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:35:04 by bcherkas          #+#    #+#             */
-/*   Updated: 2018/05/20 12:13:52 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 15:24:04 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "../../libft/includes/libft.h"
 # include "signal.h"
-# include <unistd.h>
 
 # define HASH_MAX_BYTES 32
 
@@ -30,7 +29,7 @@ typedef struct 				s_data
 	struct s_data			*next;
 }							t_data;
 
-unsigned					check_hash(char *str, t_data *lst);
+unsigned					check_hash(char *str, t_data *lst, size_t size);
 t_data						*find_in_lst(t_data **lst, ssize_t pid);
 t_data						*find_last_elem(t_data *daddy);
 size_t						ft_lstlen(t_data *lst);
