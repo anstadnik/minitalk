@@ -1,13 +1,13 @@
 .PHONY: clean fclean re
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -Wconversion#remove last one
+CFLAGS = -Wall -Wextra -Werror# -Wconversion#remove last one
 ODIR = objs/
 SDIR = srcs/
 IDIR = includes/
 LDIR = ../libft/
 NAME = server
 LIB = $(LDIR)libft.a
-FILES = server.c lstfuncs.c
+FILES = server.c lstfuncs.c check_hash.c
 OBJS = $(FILES:.c=.o)
 
 all: $(NAME)
