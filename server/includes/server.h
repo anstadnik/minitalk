@@ -6,7 +6,7 @@
 /*   By: bcherkas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 17:35:04 by bcherkas          #+#    #+#             */
-/*   Updated: 2018/05/20 15:24:04 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 17:35:25 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 typedef struct sigaction	t_sigaction;
 
-typedef struct 				s_data
+typedef struct				s_data
 {
 	void					*content;
 	ssize_t					content_size;

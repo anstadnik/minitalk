@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/20 16:42:54 by bcherkas         ###   ########.fr       */
+/*   Updated: 2018/05/20 17:34:31 by bcherkas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ int		send_letter(int pid, char c)
 
 int		send_hash(int pid, char *str)
 {
-	uint	hash;
+	t_uint	hash;
 	char	i;
 
 	hash = 0;
 	while (*str)
-		hash += (uint)*str++;
+		hash += (t_uint)*str++;
 	i = 32;
 	while (i--)
 	{
