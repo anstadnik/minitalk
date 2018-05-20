@@ -6,7 +6,7 @@
 /*   By: astadnik <astadnik@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/19 13:45:16 by astadnik          #+#    #+#             */
-/*   Updated: 2018/05/20 13:38:42 by astadnik         ###   ########.fr       */
+/*   Updated: 2018/05/20 15:30:29 by astadnik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		send_letter(int pid, char c)
 	return (0);
 }
 
-int	send_hash(int pid, char *str)
+int		send_hash(int pid, char *str)
 {
 	uint	hash;
 	char	i;
@@ -62,7 +62,6 @@ int	send_hash(int pid, char *str)
 	if (DEBUG)
 		ft_printf("\n");
 	return (0);
-
 }
 
 int		send_string(int pid, char *str)
@@ -76,21 +75,19 @@ int		send_string(int pid, char *str)
 		if (send_letter(pid, *str))
 			return (1);
 		if (!*str++)
-			break;
+			break ;
 	}
 	g_bit = -1;
 	c = 0;
-	while (c++ < 20)
+	while (c++ < 50)
 	{
 		usleep(20);
 		if (g_bit == -1)
 			kill(pid, SIGUSR1);
 		else
-			break ;
+			return (g_bit ? 0 : -1);
 	}
-	if (c == 20)
-		return (1);
-	return (g_bit ? 0 : -1);
+	return (1);
 }
 
 int		main(int ac, char **av)
@@ -98,8 +95,11 @@ int		main(int ac, char **av)
 	int	pid;
 	int	ret;
 
-	if (ac != 3 || ft_isinteger(av[1]))
+	if (ac != 3 || ft_isinteger(av[1]) || !ft_strlen(av[2]))
+	{
+		ft_printf("{red}Wrong parameters\n{eoc}");
 		return (1);
+	}
 	if (DEBUG)
 		ft_printf("%d\n", getpid());
 	signal(SIGUSR1, handler);
@@ -107,5 +107,6 @@ int		main(int ac, char **av)
 	pid = ft_atoi(av[1]);
 	while ((ret = send_string(pid, av[2])) == -1)
 		;
+	if (
 	return (ret);
 }
