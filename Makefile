@@ -5,7 +5,7 @@ TARGETS = client server
 all: $(TARGETS)
 
 $(TARGETS):
-	@echo "\x1b[36m\nCompiling $@\x1b[0m"
+	@echo -e "\x1b[36m\nCompiling $@\x1b[0m"
 	@$(MAKE) -C $@
 
 clean:

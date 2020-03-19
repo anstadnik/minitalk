@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS =# -Wall -Wextra -Werror
 ODIR = objs/
 SDIR = srcs/
 IDIR = includes/
@@ -16,7 +16,7 @@ OBJS = $(FILES:.c=.o)
 all: $(NAME)
 
 $(NAME): $(addprefix $(ODIR), $(OBJS))
-	@echo "\x1b[33m\nMaking the is.a\x1b[0m"
+	@echo -e "\x1b[33m\nMaking the is.a\x1b[0m"
 	@ar rc $@ $^
 
 $(addprefix $(ODIR), %.o): $(addprefix $(SDIR), %.c)
@@ -24,11 +24,11 @@ $(addprefix $(ODIR), %.o): $(addprefix $(SDIR), %.c)
 	@$(CC) $(CFLAGS) -I$(IDIR) -c -o $@ $<
 
 clean:
-	@echo "\x1b[31mRemoving the object files of is.a\x1b[0m"
+	@echo -e "\x1b[31mRemoving the object files of is.a\x1b[0m"
 	@rm -f $(addprefix $(ODIR), $(OBJS))
 
 fclean: clean
-	@echo "\x1b[31mRemoving the $(NAME)\x1b[0m"
+	@echo -e "\x1b[31mRemoving the $(NAME)\x1b[0m"
 	@rm -f $(NAME)
 
 re: 

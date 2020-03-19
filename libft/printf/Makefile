@@ -1,6 +1,6 @@
 .PHONY: clean fclean re
 CC = gcc
-CFLAGS =  -Wall -Wextra -Werror -Wconversion
+CFLAGS =#  -Wall -Wextra -Werror -Wconversion
 ODIR = ../objs/
 SDIR = srcs/
 IDIR = ../includes/
@@ -31,7 +31,7 @@ $(addprefix $(ODIR), %.o): $(addprefix $(SDIR), %.c)
 	@$(CC) $(CFLAGS) -I$(IDIR) -c -o $@ $<
 
 clean:
-	@echo "\x1b[31mRemoving the object files of $(NAME)\x1b[0m"
+	@echo -e "\x1b[31mRemoving the object files of $(NAME)\x1b[0m"
 	@rm -f $(addprefix $(ODIR), $(OBJS))
 
 fclean: clean
